@@ -6,7 +6,7 @@ var User = require('../model/user');
 var router = express.Router();
 mongoose.connect('mongodb://localhost:27017/nwtprojekat');
 
-/* GET users listing. */
+//del//get all users
 router.get('/', function(req, res, next) {
 
 	User.find({}, function(err, users) {
