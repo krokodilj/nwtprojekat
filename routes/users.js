@@ -17,7 +17,8 @@ router.get('/', function(req, res, next) {
 
 router.post('/register',function(req,res){
 	
-	var user= new User(req.body);
+	var user = new User(req.body);
+	console.log(user);
 	user.save(function(err){
 		if (err){
 			console.log(err)
@@ -32,6 +33,7 @@ router.post('/register',function(req,res){
 
 //authenticate user and return jwt
 router.post('/auth',function(req,res){
+	console.log(req.body);
 	User.findOne(req.body,function(err,user){
 		//fail > neki error
 		if (err){
@@ -48,7 +50,6 @@ router.post('/auth',function(req,res){
 
 		//ok
 		}else{
-
 			var token = jwt.sign(user,"tajnikljuc");
 			res.json({success:true,msg:"stavi ga u pdze",token:token});
 		}

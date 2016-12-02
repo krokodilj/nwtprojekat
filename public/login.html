@@ -1,0 +1,11 @@
+<form name="loginForm">
+    <h1>Welcome to errorMonitor!</h1>
+    <h2>Login, please.</h2>
+    <label for="id">Email or User Name:</label><br>
+    <input id="id" type="text" ng-model="id" required><br><br>
+    <label for="pass">Password:</label><br>
+    <input id="pass" type="password" ng-model="pass" required><br>
+    <button ng-disabled="loginForm.$invalid" ng-click="login()">Submit</button><br><br>
+    <p>or if you are a first time visitor,</p> 
+    <a href="#/register">Register</a>
+</form>

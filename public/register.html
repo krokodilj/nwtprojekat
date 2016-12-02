@@ -1,0 +1,14 @@
+<form name="registerForm">
+    <h2>Fill in the register form.</h2>
+    <label for="username">Username:</label><br>
+    <input id="username" type="text" ng-model="username" required><br><br>
+    <label for="pass">Password:</label><br>
+    <input id="pass" type="password" ng-model="pass" required><br><br>
+    <label for="email">Email:</label><br>
+    <input id="email" type="email" ng-model="email" required><br><br>
+    <label for="firstName">First name:</label><br>
+    <input id="firstName" type="text" ng-model="firstName"><br><br>
+    <label for="lastName">Last name:</label><br>
+    <input id="lastName" type="text" ng-model="lastName"><br><br>
+    <button ng-disabled="registerForm.$invalid" ng-click="register()">Register</button><br><br>
+</form>
