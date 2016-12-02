@@ -7,4 +7,8 @@ router.get('/', function(req, res, next) {
   res.sendFile(path.join(__dirname + '/../public/index.html'));
 });
 
+router.get('/asd', function(req, res, next) {
+  res.render('index', { title: 'asdasd' });
+});
+
 module.exports = router;
