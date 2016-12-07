@@ -16,7 +16,14 @@ module.exports = mongoose.model('User',new Schema({
 		unique:true
 	},
 	first_name:String,
-	last_name:String
-
+	last_name:String,
+	admin_apps:[{
+		type:Number,
+		ref:'App'
+	}],
+	subscribe_apps:[{
+		type:Number,
+		ref:'App'
+	}]
 	
 }));

@@ -1,6 +1,7 @@
 var express=require('express');
 var mongoose=require('mongoose');
 var App = require('../model/app');
+var jwt = require('jsonwebtoken');
 //var Event=require('../model/event')
 
 var router = express.Router();
