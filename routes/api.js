@@ -37,10 +37,11 @@ router.get('/',function(req,res){
 //register new app
 router.post('/app/add',function(req,res){
 	var app=new App(req.body);
-
+	app._admin=req.user._id;
+	console.log(app,req.user)
 	app.save(function(err){
 		if(err){
-			console.log(err)
+			
 			res.json({success:false});
 		}else{
 			res.json({success:true});

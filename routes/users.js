@@ -11,7 +11,6 @@ mongoose.connect(config.database);
 router.get('/', function(req, res, next) {
 
 	User.find({}, function(err, users) {
-		console.log(users[0].first_name)
     res.json(users);
   });
 });
@@ -34,8 +33,13 @@ router.post('/register',function(req,res){
 
 //authenticate user and return jwt
 router.post('/auth',function(req,res){
-	console.log(req.body);
-	User.findOne(req.body,function(err,user){
+	
+	var query={username:req.body.username} ;
+	if (!req.body.username)
+		query={email:req.body.email}
+		
+
+	User.findOne(query,function(err,user){
 		//fail > neki error
 		if (err){
 			console.log(err)
@@ -51,7 +55,7 @@ router.post('/auth',function(req,res){
 
 		//ok
 		}else{
-			var token = jwt.sign(user,"tajnikljuc");
+			var token = jwt.sign({username:user.username,email:user.email},"tajnikljuc");
 			res.json({success:true,msg:"stavi ga u pdze",token:token});
 		}
 	})
