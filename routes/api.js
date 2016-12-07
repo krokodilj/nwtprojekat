@@ -2,10 +2,11 @@ var express=require('express');
 var mongoose=require('mongoose');
 var App = require('../model/app');
 var jwt = require('jsonwebtoken');
+var config = require('../config')
 //var Event=require('../model/event')
 
 var router = express.Router();
-mongoose.createConnection('mongodb://localhost:27017/nwtprojekat');
+mongoose.createConnection(config.database);
 
 router.use(function(req,res,next){
 	var token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -13,7 +14,7 @@ router.use(function(req,res,next){
 	if(!token){
 		res.json({success:false,msg:"no token provided"});
 	}else{
-		jwt.verify(token, app.get('superSecret'), function(err, user) {      
+		jwt.verify(token, config.secretKey, function(err, user) {      
       if (err) {
         return res.json({ success: false, msg: 'failed to authenticate' });    
       } else {

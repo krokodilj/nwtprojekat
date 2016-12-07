@@ -2,9 +2,10 @@ var express = require('express');
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var User = require('../model/user');
+var config = require('../config')
 
 var router = express.Router();
-mongoose.connect('mongodb://localhost:27017/nwtprojekat');
+mongoose.connect(config.database);
 
 //del//get all users
 router.get('/', function(req, res, next) {
