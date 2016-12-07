@@ -6,6 +6,25 @@ var App = require('../model/app');
 var router = express.Router();
 mongoose.createConnection('mongodb://localhost:27017/nwtprojekat');
 
+router.use(function(req,res,next){
+	var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+	if(!token){
+		res.json({success:false,msg:"no token provided"});
+	}else{
+		jwt.verify(token, app.get('superSecret'), function(err, user) {      
+      if (err) {
+        return res.json({ success: false, msg: 'failed to authenticate' });    
+      } else {
+        
+        req.user = user;    
+        next();
+      }
+    });
+	}
+  	
+});
+
 //del//all apps
 router.get('/',function(req,res){
 	App.find({},function(err,result){
