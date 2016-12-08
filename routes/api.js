@@ -128,7 +128,32 @@ router.post('/app/subscribe',is_admin,function(req,res){
 	
 });
 
+/*submit error*/
 
+router.post('/app/errorlog',function(req,res){
+	
+	//get application name
+	var appID = req.body.app_id;
+	var userId=req.user._id
+	var query = {"_Id":user_id};
+
+	User.findOne(query).populate('admin_apps').populate('subscribed_apps').exec(function(err,user){
+		if(err){
+			console.log(err);
+			res.json({success:false});
+		} else if(!user){
+			res.json({success:false, msg:"Error in user fetching"});
+		} else{
+			//check if user is admin (owner) of the app
+			if(user.subscribed_apps.indexOf(appID) >=0){
+				
+			} else if(user.admin_apps.indexOf(appID) >=0){
+				//if user is admin of the app
+
+			}
+		}
+	});
+});
 
 
 module.exports= router;
