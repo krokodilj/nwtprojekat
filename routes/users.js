@@ -61,4 +61,27 @@ router.post('/auth',function(req,res){
 	})
 });
 
+//returnig data for user dashboard
+router.post('/dashboard',function(req,res){
+
+	//var id = req.user._id;
+	//{"_id":id}
+	var query={username:req.body.username} //OVDE SE DOHVATA USER KOJI JE OKACEN U MIDDLEWARE
+	User.findOne(query).populate('admin_apps').populate('subscribed_apps').exec(function(err,user){
+
+		if(err)
+		{
+			//log error if any
+			console.log(err);
+			res.json({success:false});
+		} else if(!user){
+			res.json({success:false,msg:"problems in finding user"});
+		} else{
+			//return json with user data
+			res.json({success:true, userdata:{first_name:user.first_name, last_name: user.last_name, email: user.email, username: user.username}
+		    , subscribed_apps: user.subscribed_apps, admin_apps: user.admin_apps});
+		}
+	});	
+});
+
 module.exports = router;
