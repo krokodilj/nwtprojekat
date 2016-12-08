@@ -5,6 +5,7 @@ var App = require('../model/app');
 var jwt = require('jsonwebtoken');
 var config = require('../config')
 //var Event=require('../model/event')
+var sender = require('../controller/sender');
 
 var router = express.Router();
 mongoose.createConnection(config.database);
@@ -91,6 +92,7 @@ router.post('/app/subscribe',function(req,res){
 							console.log(err);
 							return res.json({success:false})
 						}else{
+							sender.send('subscribe', app, user);							
 							return res.json({success:true})
 						}
 
