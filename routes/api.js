@@ -67,11 +67,11 @@ router.post('/app/subscribe',function(req,res){
 		
 		//if user is already subscribed
 		if (user.subscribed_apps.indexOf(req.body.app_id) >= 0) {    				
-			res.json({success:"false",msg:"user is already subscribed"})
+			return res.json({success:"false",msg:"user is already subscribed"})
 		}
 		//if its admin user o.O
 		if (user.admin_apps.indexOf(req.body.app_id) >= 0) {  
-			res.json({success:false,msg:"wtf you are admin"})
+			return res.json({success:false,msg:"wtf you are admin"})
 		}
 		//add app to user
 		user.subscribed_apps.push(req.body.app_id);
@@ -79,7 +79,7 @@ router.post('/app/subscribe',function(req,res){
 
 			if(err){
 				console.log(err);
-				res.json({success:false})
+				return res.json({success:false})
 			}else{
 				
 				App.findOne({_id:req.body.app_id},function(err,app){
@@ -89,9 +89,9 @@ router.post('/app/subscribe',function(req,res){
 					app.save(function(err){
 						if(err){
 							console.log(err);
-							res.json({success:false})
+							return res.json({success:false})
 						}else{
-							res.json({success:true})
+							return res.json({success:true})
 						}
 
 					})
