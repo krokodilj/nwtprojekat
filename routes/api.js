@@ -2,9 +2,10 @@ var express=require('express');
 var mongoose=require('mongoose');
 var User = require('../model/user');
 var App = require('../model/app');
+var Event = require('../model/event');
 var config = require('../config');
 var auth = require('../controller/auth');
-//var Event=require('../model/event')
+var Event=require('../model/event')
 var sender = require('../controller/sender');
 
 var router = express.Router();
@@ -89,7 +90,51 @@ router.post('/app/subscribe',auth.is_admin,function(req,res){
 	})	
 });
 
+/*submit error*/
 
+router.post('/app/errorlog',function(req,res){
+	
+	
+	//get application name
+	var appID = req.body.app_id;
+	console.log(req.body.event);
+	var someEvent = new Event (req.body.event);
+
+
+	var userId=req.user._id
+	var query = {"_Id":user_id};
+	
+	
+	User.findOne(query).populate('admin_apps').populate('subscribed_apps').exec(function(err,user){
+		if(err){
+			console.log(err);
+			res.json({success:false});
+		} else if(!user){
+			res.json({success:false, msg:"Error in user fetching"});
+		} else{
+			//check if user is admin (owner) of the app or is subscribed to the app
+			if(user.subscribed_apps.indexOf(appID) >=0 || user.admin_apps.indexOf(appID) >=0){
+				//put app id into event object
+				someEvent.app = appID;
+				//save the event 
+				someEvent.save(function(err){
+					if(err){
+						//console.log(err);
+						res.json({success:false});
+					}else{
+						//SEND ERROR TO EMAILS
+						res.json({success:false});
+					}
+				});
+				
+
+			} else{
+				//you dont have right to post to the app
+				res.json({success:false, msg:"You are not subscribed to the app. And you dont own it !!"});
+			}
+		}
+	});
+});
 
 
 

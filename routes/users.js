@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var User = require('../model/user');
 var config = require('../config')
+var auth = require('../controller/auth');
 
 var router = express.Router();
 mongoose.connect(config.database);
@@ -66,7 +67,7 @@ router.post('/dashboard',function(req,res){
 
 	//var id = req.user._id;
 	//{"_id":id}
-	var query={username:req.body.username} //OVDE SE DOHVATA USER KOJI JE OKACEN U MIDDLEWARE
+	var query={username:req.user.username} //OVDE SE DOHVATA USER KOJI JE OKACEN U MIDDLEWARE
 	User.findOne(query).populate('admin_apps').populate('subscribed_apps').exec(function(err,user){
 
 		if(err)
