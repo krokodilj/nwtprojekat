@@ -59,6 +59,50 @@ router.post('/app/add',function(req,res){
 	})
 })
 
+//subscribe user to app
+router.post('/app/subscribe',function(req,res){
+
+	
+	User.findOne({_id:req.body.user_id},function(err,user){
+		
+		//if user is already subscribed
+		if (user.subscribed_apps.indexOf(req.body.app_id) >= 0) {    				
+			res.json({success:"false",msg:"user is already subscribed"})
+		}
+		//if its admin user o.O
+		if (user.admin_apps.indexOf(req.body.app_id) >= 0) {  
+			res.json({success:false,msg:"wtf you are admin"})
+		}
+		//add app to user
+		user.subscribed_apps.push(req.body.app_id);
+		user.save(function(err){
+
+			if(err){
+				console.log(err);
+				res.json({success:false})
+			}else{
+				
+				App.findOne({_id:req.body.app_id},function(err,app){
+
+					//add user to app
+					app.subscribers.push(req.body.user_id);
+					app.save(function(err){
+						if(err){
+							console.log(err);
+							res.json({success:false})
+						}else{
+							res.json({success:true})
+						}
+
+					})
+				})
+			}
+		})
+	})
+	
+	
+});
+
 //modify app
 router.put('/app/modify',function(req,res){
 

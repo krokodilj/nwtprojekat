@@ -13,7 +13,11 @@ module.exports = mongoose.model('App',new Schema({
 	admin:{
 		type:Schema.Types.ObjectId,
 		ref:'User'
-	}
+	},
+	subscribers:[{
+		type:Schema.Types.ObjectId,
+		ref:'User'
+	}]
 
 
 	

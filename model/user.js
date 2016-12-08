@@ -21,7 +21,7 @@ module.exports = mongoose.model('User',new Schema({
 		type:Schema.Types.ObjectId,
 		ref:'App'
 	}],
-	subscribe_apps:[{
+	subscribed_apps:[{
 		type:Schema.Types.ObjectId,
 		ref:'App'
 	}]
