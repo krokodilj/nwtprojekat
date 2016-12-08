@@ -27,7 +27,7 @@ var Sender = {
 
             var receivers=users[0];
             for (i = 1; i < users.length; i++) { 
-                receivers += ', '+users[i];
+                receivers.concat(', ',users[i]);
             }
             // setup e-mail data 
             var mailOptions = {
