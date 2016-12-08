@@ -10,6 +10,7 @@ var sender = require('../controller/sender');
 var router = express.Router();
 mongoose.createConnection(config.database);
 
+//auth middleware
 router.use(function(req,res,next){
 	var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
@@ -29,10 +30,31 @@ router.use(function(req,res,next){
   	
 });
 
+
+//is admin middleware
+var is_admin=function(req,res,next){
+
+	User.findOne({_id:req.user._id}).exec(function(err,user){
+		if(err){
+			console.log(err)
+
+		//fail > not authorised
+		}else if(!(user.admin_apps.indexOf(req.body.app_id)>=0)){
+			return res.json({success:false,msg:"not authorised"});			
+
+		//ok 	
+		}else{
+			next();
+		}
+		
+	})
+	
+}
+
 //del//all apps
-router.get('/',function(req,res){
+router.post('/',function(req,res){
 	App.find({},function(err,result){
-		res.json(result)
+		return res.json(result)
 	})
 })
 
@@ -61,7 +83,8 @@ router.post('/app/add',function(req,res){
 })
 
 //subscribe user to app
-router.post('/app/subscribe',function(req,res){
+//req must have body.app_id
+router.post('/app/subscribe',is_admin,function(req,res){
 
 	
 	User.findOne({_id:req.body.user_id},function(err,user){
@@ -105,25 +128,6 @@ router.post('/app/subscribe',function(req,res){
 	
 });
 
-//modify app
-router.put('/app/modify',function(req,res){
-
-	var name= req.json.name;
-
-	App.find({name},function(err,app){
-		if(err){
-			res.json({success:false})
-
-		//fail > app not found
-		}else if(!app){
-			res.json({success:false,msg:"app not found"})
-		}else{
-			app.stack=req.json.stack;
-			app.version=req.json.version;
-			app.repo=req.json.repo;
-		}
-	})
-});
 
 
 
