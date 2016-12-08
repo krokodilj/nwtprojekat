@@ -10,14 +10,14 @@ module.exports = mongoose.model('App',new Schema({
 	stack:[String],
 	version:String,
 	repo:String,
-	events:[{
-		type:Schema.Types.ObjectId ,
-		ref:'Event'
-	}],
-	_admin:{
-		type:Number,
+	admin:{
+		type:Schema.Types.ObjectId,
 		ref:'User'
-	}
+	},
+	subscribers:[{
+		type:Schema.Types.ObjectId,
+		ref:'User'
+	}]
 
 
 	
