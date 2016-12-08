@@ -1,5 +1,6 @@
 var express=require('express');
 var mongoose=require('mongoose');
+var User = require('../model/user');
 var App = require('../model/app');
 var jwt = require('jsonwebtoken');
 var config = require('../config')
@@ -37,14 +38,23 @@ router.get('/',function(req,res){
 //register new app
 router.post('/app/add',function(req,res){
 	var app=new App(req.body);
-	app._admin=req.user._id;
-	console.log(app,req.user)
+	app.admin=req.user._id;
+	
 	app.save(function(err){
 		if(err){
-			
+			console.log(err)
 			res.json({success:false});
 		}else{
 			res.json({success:true});
+			User.findOne({_id:req.user._id},function(err,user){
+				user.admin_apps.push(app._id);
+				console.log(app._id)
+				user.save(function(err){
+					console.log(err);
+				});
+				
+				
+			})
 		}
 	})
 })

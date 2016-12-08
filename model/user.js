@@ -18,11 +18,11 @@ module.exports = mongoose.model('User',new Schema({
 	first_name:String,
 	last_name:String,
 	admin_apps:[{
-		type:Number,
+		type:Schema.Types.ObjectId,
 		ref:'App'
 	}],
 	subscribe_apps:[{
-		type:Number,
+		type:Schema.Types.ObjectId,
 		ref:'App'
 	}]
 	

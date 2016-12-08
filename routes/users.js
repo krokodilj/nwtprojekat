@@ -55,7 +55,7 @@ router.post('/auth',function(req,res){
 
 		//ok
 		}else{
-			var token = jwt.sign({username:user.username,email:user.email},"tajnikljuc");
+			var token = jwt.sign({username:user.username,email:user.email,_id:user._id},"tajnikljuc");
 			res.json({success:true,msg:"stavi ga u pdze",token:token});
 		}
 	})
