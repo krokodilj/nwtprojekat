@@ -24,15 +24,10 @@ var Sender = {
             };
 
         }else if(type=='error'){
-
-            var receivers=users[0];
-            for (i = 1; i < users.length; i++) { 
-                receivers.concat(', ',users[i]);
-            }
             // setup e-mail data 
             var mailOptions = {
                 from: 'errorMonitor 👥', // sender address
-                to: receivers, 
+                to: users.toString(), 
                 subject: 'Error on application '+obj.app.name, // Subject line
                 text: 'Date: '+ obj.date, // plaintext body
                 html: '<p>Hi,</p><p>this is notification for error on application '.concat(obj.app.name,'</p><p>Stack      : ',

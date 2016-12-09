@@ -133,7 +133,6 @@ router.post('/app/errorlog',auth.is_subscribed,function(req,res){
 							for(i=0;i<uuu.subscribers.length;i++){
 								users.push(uuu.subscribers[i].email)
 							}
-							console.log(users);
 						sender.send("error",app,users);
 						})
 					})

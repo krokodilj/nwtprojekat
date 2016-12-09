@@ -9,7 +9,7 @@ var router = express.Router();
 mongoose.connect(config.database);
 
 //auth middleware
-router.use(auth.is_logged);
+//router.use(auth.is_logged);
 
 //del//get all users
 router.get('/', function(req, res, next) {
