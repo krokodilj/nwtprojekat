@@ -92,7 +92,7 @@ router.post('/app/subscribe',auth.is_admin,function(req,res){
 
 /*submit error*/
 
-router.post('/app/errorlog',function(req,res){
+router.post('/app/errorlog',auth.is_subscribed,function(req,res){
 	
 	
 	//get application name
@@ -116,14 +116,29 @@ router.post('/app/errorlog',function(req,res){
 			//put app id into event object
 			event.app = appID;
 			//save the event 
-			console.log(event);
+			
 			event.save(function(err){
 				if(err){
 					console.log(err);
 					res.json({success:false});
 				}else{
 					//SEND ERROR TO EMAILS
-					res.json({success:true});
+					res.json({success:true,event:event});
+					Event.findOne({_id:event._id}).populate('app').exec(function(err,app){
+						
+						App.findOne({_id:app.app._id}).populate('admin subscribers').exec(function(err,uuu){
+							
+							users=[]
+							users.push(uuu.admin.email)
+							for(i=0;i<uuu.subscribers.length;i++){
+								users.push(uuu.subscribers[i].email)
+							}
+							console.log(users);
+						sender.send("error",app,users);
+						})
+					})
+					
+					
 				}
 			});
 				
