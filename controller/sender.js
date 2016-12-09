@@ -12,6 +12,7 @@ var transport = nodemailer.createTransport("SMTP", {
 var Sender = {
     
     send: function (type, obj, users) {
+        console.log(obj);
         if(type=='subscribe'){
             // setup e-mail data 
             var mailOptions = {
