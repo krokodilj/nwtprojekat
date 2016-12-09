@@ -8,6 +8,9 @@ var auth = require('../controller/auth');
 var router = express.Router();
 mongoose.connect(config.database);
 
+//auth middleware
+router.use(auth.is_logged);
+
 //del//get all users
 router.get('/', function(req, res, next) {
 
@@ -65,9 +68,9 @@ router.post('/auth',function(req,res){
 //returnig data for user dashboard
 router.post('/dashboard',function(req,res){
 
-	//var id = req.user._id;
-	//{"_id":id}
-	var query={username:req.user.username} //OVDE SE DOHVATA USER KOJI JE OKACEN U MIDDLEWARE
+	
+	var userId=req.user._id;
+	var query = {"_id":userId}; //OVDE SE DOHVATA USER KOJI JE OKACEN U MIDDLEWARE
 	User.findOne(query).populate('admin_apps').populate('subscribed_apps').exec(function(err,user){
 
 		if(err)
