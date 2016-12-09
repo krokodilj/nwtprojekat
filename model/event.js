@@ -19,9 +19,7 @@ var schema = new Schema({
 	app: { 
 		type: Schema.Types.ObjectId,
 		 ref: 'App' 
-		}
-
-	
+	}
 })
 
 schema.pre('save',function(next){

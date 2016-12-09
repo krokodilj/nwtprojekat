@@ -38,6 +38,45 @@ var Auth={
 			}
 			
 		})	
+	},
+
+	is_subscribed:function(req, res, next) {
+
+		User.findOne({_id:req.user._id}).exec(function(err, user){
+			//user is app admin
+			if(user.admin_apps.indexOf(req.body.app_id) >=0) {
+				next();
+			}
+			//user is subscribed
+			else if (user.subscribed_apps.indexOf(req.body.app_id) >= 0) {
+				next();
+			}
+			//not admin not subscribed
+			else {
+				return res.json({success:false,msg:"not subscribed"});
+			}
+		})
+	},
+
+	is_comment_author:function(req, res, next) {
+		require('mongodb').MongoClient.connect(config.database, function(err, db) {
+			if(err) {
+				res.json({success:false, msg:"bad database connection"});
+			}
+			else {
+				var collection = db.collection('comments');
+				collection.find(require('mongodb').ObjectID(req.body.comment._id)).forEach(function(comment) {
+					if(comment.author == req.user._id) {
+						next();
+						db.close();
+					}
+					else {
+						return res.json({success:false, msg:"user is not an author of the comment"});
+					}
+				});
+			}
+		});
+
 	}
 
 

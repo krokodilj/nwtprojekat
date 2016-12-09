@@ -146,8 +146,44 @@ router.post('/app/errorlog',auth.is_subscribed,function(req,res){
 			
 		}
 	});
+
 });
 
+//post a new comment on a comment or event
+//must be subscribed or event admin
+router.post('/comment', auth.is_subscribed, function(req, res) {
+	console.log(req.body);
+	require('mongodb').MongoClient.connect(config.database, function(err, db) {
+		if(err) {
+			res.json({success:false});
+		}
+		else {
+			var collection = db.collection('comments');
+			collection.insert(req.body.comment, function (err, docs) {
+				collection.save(req.body.comment, function (err) {
+					res.json({success:true});
+					db.close();
+				});
+		});
+		}
+	});
 
+});
+
+//delete comment
+//must be comment author
+router.delete('/comment', auth.is_comment_author, function(req, res) {
+	require('mongodb').MongoClient.connect(config.database, function(err, db) {
+		if(err) {
+			return res.json({success:false, msg:"bad database connection"});
+		}
+		else {
+			var collection = db.collection('comments');
+			collection.remove(require('mongodb').ObjectID(req.body.comment._id));
+			db.close();
+			return res.json({success:true});
+		}
+	});
+});
 
 module.exports= router;

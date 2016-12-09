@@ -11,6 +11,10 @@ app.config(function($routeProvider) {
             templateUrl : "register.html",
             controller : "registerController"
         })
+        .when("/dashboard", {
+            templateUrl : "dashboard.html",
+            controller : "dashboardController"
+        })
     });
 
 //definisanje angular servisa koji sadrzi podatke i metode za korisnika, koje mozemo deliti izmedju kontrolera
@@ -27,8 +31,15 @@ app.service('userService', function($http, $window) {
     };
 
     var login = function() {
-        $http.post('/users/auth', user).then( function(response) { user.token = response.data.token; });
-        $window.location = "#/main"
+        $http.post('/users/auth', user).then( function(response) { 
+            if(response.data.success) {
+                user.token = response.data.token;
+                $window.location = "#/dashboard";
+            }
+            else {
+                alert("authentiaction failed!");
+            }
+        });
     };
 
     return {
