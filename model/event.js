@@ -12,10 +12,14 @@ var schema = new Schema({
 	},
 	date:{
 		type:Date,
-		required:true
+		required:true,
+		default: Date.now 
 	},
 	version:String,
-	app: { type: Number, ref: 'App' }
+	app: { 
+		type: Schema.Types.ObjectId,
+		 ref: 'App' 
+		}
 
 	
 })
