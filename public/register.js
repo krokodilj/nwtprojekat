@@ -5,8 +5,7 @@ app.controller('registerController', function($scope, $http, userService) {
             "first_name" : $scope.firstName, "last_name" : $scope.lastName};
         $http.post('/users/register', userData).then(function(response) {
             if(response) {
-                userService.setUser(userData); //u kontrolerima samo postavljamo podatke u userService
-                userService.login();           //a onda ih service salje serveru, cuva dobijeni token i redirectuje
+                userService.login(userData);
             }
         })
     }

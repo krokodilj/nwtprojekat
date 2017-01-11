@@ -1,4 +1,4 @@
-var app = angular.module("myApp", ["ngRoute"]);
+var app = angular.module("myApp", ["ngRoute", "ngCookies"]);
             
 //definisanje routova za view i controllere unutar glavnog index.html
 app.config(function($routeProvider) {
@@ -17,24 +17,17 @@ app.config(function($routeProvider) {
         })
     });
 
-//definisanje angular servisa koji sadrzi podatke i metode za korisnika, koje mozemo deliti izmedju kontrolera
-app.service('userService', function($http, $window) {
+//definisanje angular servisa koji sadrzi login metodu
+app.service('userService', function($http, $window, $cookies) {
 
-    var user = undefined;
-
-    var setUser = function(usr) {
-        user = usr;
-    };
-
-    var getUser = function(){
-        return user;
-    };
-
-    var login = function() {
-        $http.post('/users/auth', user).then( function(response) { 
+    var login = function(userData) {
+        $http.post('/users/auth', userData).then( function(response) { 
             if(response.data.success) {
-                user.token = response.data.token;
-                $window.location = "#/dashboard";
+                $cookies.put("token", response.data.token);
+                $http.post("/users/dashboard", userData).then( function(response) {
+                    $cookies.putObject("userData", response.data.userdata);
+                    $window.location = "#/dashboard";
+                });
             }
             else {
                 alert("authentiaction failed!");
@@ -43,8 +36,6 @@ app.service('userService', function($http, $window) {
     };
 
     return {
-        getUser: getUser,
-        setUser: setUser,
         login : login
     };
 

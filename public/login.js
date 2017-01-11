@@ -8,10 +8,6 @@ app.controller('loginController', function($scope, $http, userService) {
         else {
             userData = {"username" : $scope.id, "password" : $scope.pass};
         }
-        $http.post("/users/dashboard", userData).then( function(response) {
-            // poslati zahtev za login
-        });
-        userService.setUser(userData);
-        userService.login();
+        userService.login(userData);
     }
 });
