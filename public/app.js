@@ -4,15 +4,15 @@ var app = angular.module("myApp", ["ngRoute", "ngCookies"]);
 app.config(function($routeProvider) {
     $routeProvider
         .when("/", {
-            templateUrl : "login.html",
+            templateUrl : "views/login.html",
             controller : "loginController"
         })
         .when("/register", {
-            templateUrl : "register.html",
+            templateUrl : "views/register.html",
             controller : "registerController"
         })
         .when("/dashboard", {
-            templateUrl : "dashboard.html",
+            templateUrl : "views/dashboard.html",
             controller : "dashboardController"
         })
     });
