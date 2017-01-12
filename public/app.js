@@ -15,6 +15,10 @@ app.config(function($routeProvider) {
             templateUrl : "views/dashboard.html",
             controller : "dashboardController"
         })
+        .when("/register_app",{
+            templateUrl:"views/register_app.html",
+            controller:"register_app"
+        })
     });
 
 //definisanje angular servisa koji sadrzi login metodu
