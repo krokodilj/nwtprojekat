@@ -25,7 +25,9 @@ app.service('userService', function($http, $window, $cookies) {
             if(response.data.success) {
                 $cookies.put("token", response.data.token);
                 $http.post("/users/dashboard", userData).then( function(response) {
-                    $cookies.putObject("userData", response.data.userdata);
+                    $cookies.putObject("userdata", response.data.userdata);
+                    $cookies.putObject("subscribed_apps", response.data.subscribed_apps);
+                    $cookies.putObject("admin_apps", response.data.admin_apps);
                     $window.location = "#/dashboard";
                 });
             }

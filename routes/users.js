@@ -67,12 +67,8 @@ router.post('/auth',function(req,res){
 
 //returnig data for user dashboard
 router.post('/dashboard',function(req,res){
-
 	
-	var username=req.body.username;
-	//var query = {"_id":userId}; //OVDE SE DOHVATA USER KOJI JE OKACEN U MIDDLEWARE
-	var query = {username:username};
-	User.findOne(query).populate('admin_apps').populate('subscribed_apps').exec(function(err,user){
+	User.findOne(req.body).populate('admin_apps').populate('subscribed_apps').exec(function(err,user){
 
 		if(err)
 		{
