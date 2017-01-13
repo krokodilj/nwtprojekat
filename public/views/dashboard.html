@@ -13,7 +13,7 @@
 
             <div ng-cloak="" class="tabsdemoDynamicHeight">
                 <md-content>
-                    <md-tabs md-dynamic-height="" md-border-bottom="">
+                    <md-tabs md-selected="dashboardCtrl.selectedIndex" md-dynamic-height="" md-border-bottom="">
                         <md-tab label="Apps">
                             <md-content class="md-padding">
 
@@ -21,11 +21,15 @@
                                     <thead>
                                         <th>App Id</th>
                                         <th>App Name</th>
+                                        <th>Current Version</th>
+                                        <th>Repository</th>
                                     </thead>
                                     <tbody>
-                                        <tr ng-click="" style="cursor: pointer" ng-repeat="app in dashboardCtrl.admin_apps">
+                                        <tr ng-click="" class="clickable-row" style="cursor: pointer" ng-repeat="app in dashboardCtrl.admin_apps">
                                             <td>{{app._id}}</td>
                                             <td>{{app.name}}</td>
+                                            <td>{{app.version}}</td>
+                                            <td>{{app.repo}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

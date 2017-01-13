@@ -5,7 +5,8 @@
     function dashboardController($scope, $http, $cookies) {
 
         var vm = this;
-        $scope.indexCtrl.loggedIn = true;
+        vm.selectedIndex = 0; // index of selected tab in view
+        $scope.indexCtrl.loggedIn = true; //user is logged in set to true
         var user = $cookies.getObject("userdata");
         console.log($cookies.getAll())
         $http.post("/users/dashboard", user, { headers: { 'x-access-token': $cookies.get("token") } }).then(function (response) {
