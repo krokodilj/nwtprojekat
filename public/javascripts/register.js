@@ -12,7 +12,7 @@
         function register () {
             var userData = {
                 "username": vm.username, "password": vm.pass, "email": vm.email,
-                "first_name": vm.firstName, "last_name": vms.lastName
+                "first_name": vm.firstName, "last_name": vm.lastName
             };
             $http.post('/users/register', userData).then(function (response) {
                 if (response) {

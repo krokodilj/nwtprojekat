@@ -8,7 +8,7 @@
         $scope.indexCtrl.loggedIn = true;
         var user = $cookies.getObject("userdata");
         console.log($cookies.getAll())
-        $http.post("/users/dashboard", user).then(function (response) {
+        $http.post("/users/dashboard", user, { headers: { 'x-access-token': $cookies.get("token") } }).then(function (response) {
 
             $cookies.putObject("userdata", response.data.userdata);
             $cookies.putObject("subscribed_apps", response.data.subscribed_apps);

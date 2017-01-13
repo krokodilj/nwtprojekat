@@ -66,7 +66,7 @@ router.post('/auth',function(req,res){
 });
 
 //returnig data for user dashboard
-router.post('/dashboard',function(req,res){
+router.post('/dashboard',auth.is_logged,function(req,res){
 	
 	User.findOne(req.body).populate('admin_apps').populate('subscribed_apps').exec(function(err,user){
 
