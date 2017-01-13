@@ -25,7 +25,7 @@
                                         <th>Repository</th>
                                     </thead>
                                     <tbody>
-                                        <tr ng-click="" class="clickable-row" style="cursor: pointer" ng-repeat="app in dashboardCtrl.admin_apps">
+                                        <tr ng-click="dashboardCtrl.selectApp(app._id)" ng-repeat="app in dashboardCtrl.admin_apps">
                                             <td>{{app._id}}</td>
                                             <td>{{app.name}}</td>
                                             <td>{{app.version}}</td>
@@ -41,7 +41,7 @@
                                         <th>App Name</th>
                                     </thead>
                                     <tbody>
-                                        <tr ng-click="" style="cursor: pointer" ng-repeat="app in dashboardCtrl.subscribed_apps">
+                                        <tr style="cursor: pointer" ng-repeat="app in dashboardCtrl.subscribed_apps">
                                             <td>{{app._id}}</td>
                                             <td>{{app.name}}</td>
                                         </tr>
@@ -61,7 +61,7 @@
                             <md-content class="md-padding">
                                 <h1 class="md-display-2">Events</h1>
 
-
+                                <p ng-click="dashboardCtrl.selectApp()"> neki tekst bzvz </p>
 
                             </md-content>
                         </md-tab>
