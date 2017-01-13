@@ -1,0 +1,20 @@
+<form name="register_app_form">
+ 
+    <div class="form-group">
+        <label for="name">name:</label>
+        <input id="name" class="form-control" type="text" ng-model="registerAppCtrl.name" required>
+    </div>
+    <div class="form-group">
+        <label for="version">version:</label>
+        <input id="version" class="form-control" type="text" ng-model="registerAppCtrl.version" required>
+    </div>
+    <div class="form-group">
+        <label for="stack">stack:</label>
+        <input id="stack" class="form-control" type="text" ng-model="registerAppCtrl.stack">
+    </div>
+    <div class="form-group">
+        <label for="repo">repo:</label>
+        <input id="repo" class="form-control" type="text" ng-model="registerAppCtrl.repo">
+    </div>
+    <button class="btn btn-primary" ng-disabled="register_app_form.$invalid" ng-click="registerAppCtrl.register_app()">Register</button><br><br>
+</form>

@@ -1,12 +1,24 @@
-app.controller('registerController', function($scope, $http, userService) {
+(function () {
+    angular.module("myApp")
+        .controller('registerController', registerController);
 
-    $scope.register = function () {
-        var userData = {"username" : $scope.username, "password" : $scope.pass, "email" : $scope.email, 
-            "first_name" : $scope.firstName, "last_name" : $scope.lastName};
-        $http.post('/users/register', userData).then(function(response) {
-            if(response) {
-                userService.login(userData);
-            }
-        })
+    //register page controller
+    function registerController($http, $scope) {
+
+        var vm = this;
+        vm.register = register;
+        
+        //method for user registration
+        function register () {
+            var userData = {
+                "username": vm.username, "password": vm.pass, "email": vm.email,
+                "first_name": vm.firstName, "last_name": vms.lastName
+            };
+            $http.post('/users/register', userData).then(function (response) {
+                if (response) {
+                    $scope.indexCtrl.login(userData);
+                }
+            })
+        }
     }
-});
+})();

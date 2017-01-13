@@ -1,12 +1,23 @@
-app.controller('dashboardController', function($scope, $http, $cookies) {
-    
-    var user = $cookies.getObject("userdata");
-    console.log($cookies.getAll())
-    $scope.username = user.username;
-    $scope.email = user.email;
-    $scope.first_name = user.first_name;
-    $scope.last_name = user.last_name;
+(function () {
+    angular.module("myApp")
+        .controller('dashboardController', dashboardController);
 
-    $scope.admin_apps = $cookies.getObject("admin_apps");
-    $scope.subscribed_apps = $cookies.getObject("subscribed_apps");
-});
+    function dashboardController($scope, $http, $cookies) {
+
+        var vm = this;
+        $scope.indexCtrl.loggedIn = true;
+        var user = $cookies.getObject("userdata");
+        console.log($cookies.getAll())
+        $http.post("/users/dashboard", user).then(function (response) {
+
+            $cookies.putObject("userdata", response.data.userdata);
+            $cookies.putObject("subscribed_apps", response.data.subscribed_apps);
+            $cookies.putObject("admin_apps", response.data.admin_apps);
+
+            vm.userdata = response.data.userdata;
+            vm.subscribed_apps = response.data.subscribed_apps;
+            vm.admin_apps = response.data.admin_apps;
+            
+        });
+    }
+})();
