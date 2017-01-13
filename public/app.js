@@ -1,5 +1,5 @@
 angular
-    .module("myApp", ["ngRoute", "ngCookies"])
+    .module("myApp", ["ngRoute", "ngCookies", 'ngMaterial', 'ngMessages'])
     .config(function ($routeProvider) { //defining routes for view and controllers in index.html
         $routeProvider
             .when("/", {

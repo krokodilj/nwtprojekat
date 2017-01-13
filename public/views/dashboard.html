@@ -1,4 +1,5 @@
 <h1>Welcome back to ErrorMonitor, {{dashboardCtrl.userdata.username}}</h1>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2">
@@ -10,34 +11,59 @@
         </div>
         <div class="col-md-8 list-group">
 
-            <h3>Your Apps:</h3>
-            <table class="table table-hover">
-                <thead>
-                    <th>App Id</th>
-                    <th>App Name</th>
-                </thead>
-                <tbody>
-                    <tr ng-click="" style="cursor: pointer" ng-repeat="app in dashboardCtrl.admin_apps">
-                        <td>{{app._id}}</td>
-                        <td>{{app.name}}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div ng-cloak="" class="tabsdemoDynamicHeight">
+                <md-content>
+                    <md-tabs md-dynamic-height="" md-border-bottom="">
+                        <md-tab label="Apps">
+                            <md-content class="md-padding">
 
-            <h3>Apps you subscribed to:</h3>
-            <table class="table table-hover">
-                <thead>
-                    <th>App Id</th>
-                    <th>App Name</th>
-                </thead>
-                <tbody>
-                    <tr ng-click="" style="cursor: pointer" ng-repeat="app in dashboardCtrl.subscribed_apps">
-                        <td>{{app._id}}</td>
-                        <td>{{app.name}}</td>
-                    </tr>
-                </tbody>
-            </table>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <th>App Id</th>
+                                        <th>App Name</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-click="" style="cursor: pointer" ng-repeat="app in dashboardCtrl.admin_apps">
+                                            <td>{{app._id}}</td>
+                                            <td>{{app.name}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
+                                <h3>Apps you subscribed to:</h3>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <th>App Id</th>
+                                        <th>App Name</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-click="" style="cursor: pointer" ng-repeat="app in dashboardCtrl.subscribed_apps">
+                                            <td>{{app._id}}</td>
+                                            <td>{{app.name}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </md-content>
+                        </md-tab>
+                        <md-tab label="Fragments">
+                            <md-content class="md-padding">
+                                <h1 class="md-display-2">Fragments</h1>
+
+
+                            </md-content>
+                        </md-tab>
+                        <md-tab label="Events">
+                            <md-content class="md-padding">
+                                <h1 class="md-display-2">Events</h1>
+
+
+
+                            </md-content>
+                        </md-tab>
+                    </md-tabs>
+                </md-content>
+            </div>
         </div>
     </div>
 </div>
