@@ -79,7 +79,7 @@
                                                 <th>App Version</th>
                                             </thead>
                                             <tbody>
-                                                <tr ng-click="" ng-repeat="e in dashboardCtrl.eventsData| byFragment:selectedFragments">
+                                                <tr ng-click="dashboardCtrl.selectEvent(e._id)" ng-repeat="e in dashboardCtrl.eventsData| byFragment:selectedFragments">
                                                     <td>{{e._id}}</td>
                                                     <td>{{e.stack}}</td>
                                                     <td>{{e.date}}</td>
@@ -145,6 +145,23 @@
 
                             </md-content>
                         </md-tab>
+
+                        <md-tab label="Comments">
+                            <md-content class="md-padding">
+                                <div class="md-padding" ng-cloak>
+                                    <div>
+                                        <h1 class="md-title">Please leave a comment</h1>
+                                        <div layout="row">
+                                            <md-input-container>
+                                                <label>Comments</label>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </md-content>
+                        </md-tab>
+
                     </md-tabs>
                 </md-content>
             </div>

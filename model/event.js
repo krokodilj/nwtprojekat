@@ -2,30 +2,30 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
-	stack:{
-		type:String,
-		required:true,
+	stack: {
+		type: String,
+		required: true,
 	},
-	fragment:{
-		type:String,
-		required:true
+	fragment: {
+		type: String,
+		required: true
 	},
-	date:{
-		type:Date,
-		required:true,
-		default: Date.now 
+	date: {
+		type: Date,
+		required: true,
+		default: Date.now
 	},
-	version:String,
-	app: { 
+	version: String,
+	app: {
 		type: Schema.Types.ObjectId,
-		 ref: 'App' 
+		ref: 'App'
 	}
 })
 
-schema.pre('save',function(next){
-	this.date=new Date();
+schema.pre('save', function (next) {
+	this.date = new Date();
 
 	next();
 });
 
-module.exports = mongoose.model('Event',schema);
+module.exports = mongoose.model('Event', schema);
