@@ -52,14 +52,14 @@
                         </md-tab>
                         <md-tab label="Fragments">
                             <md-content class="md-padding">
-                               
-                                <!-- here goes selection by fragments || event.fragment for event in eventsData -->
-                                <select ng-model="selectedFragment" ng-options="event.fragment for event in dashboardCtrl.eventsData" id="selectedFragment">
-                                </select> 
-                               <!-- FRAGMENTS TABLE-->
-                               <div>{{selectedFragment.stack}}</div>
 
-                               <table class="table table-hover">
+                                <!-- here goes selection by fragments || event.fragment for event in eventsData -->
+                                <select ng-model="selectedFragment" ng-options="event.fragment for event in dashboardCtrl.eventsData | unique:'fragment'"
+                                    id="selectedFragment">
+                                </select>
+                                <!-- FRAGMENTS TABLE-->
+
+                                <table class="table table-hover">
                                     <thead>
                                         <th>Event Id</th>
                                         <th>Stack</th>
@@ -75,24 +75,56 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                               <!--END OF FRAGMENTS TABLE -->
-                                
+                                <!--END OF FRAGMENTS TABLE -->
+
                             </md-content>
                         </md-tab>
-                        <md-tab label="Versions">
+                        <md-tab label="App Version">
                             <md-content class="md-padding">
-                                <h1 class="md-display-2">Versions</h1>
+                                <div class="md-padding" ng-cloak>
+                                    <div>
+                                        <h1 class="md-title">Select Application Version Below</h1>
+                                        <div layout="row">
+                                            <md-input-container>
+                                                <label>Version</label>
+                                                <md-select ng-model="selectedVersions" multiple>
+                                                    <md-option ng-value="event.version" ng-repeat="event in dashboardCtrl.eventsData | unique:'version'">{{event.version}}</md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
 
-                                <p ng-click="dashboardCtrl.selectApp()"> neki tekst bzvz </p>
-
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <th>Event Id</th>
+                                                <th>Stack</th>
+                                                <th>Date</th>
+                                                <th>App Version</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-click="" ng-repeat="e in dashboardCtrl.eventsData| byAppVersion:selectedVersions">
+                                                    <td>{{e._id}}</td>
+                                                    <td>{{e.stack}}</td>
+                                                    <td>{{e.date}}</td>
+                                                    <td>{{e.version}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </md-content>
-                        </md-tab>  
-
-                        <md-tab label="Events">
+                        </md-tab>
+                        <md-tab label="Event">
                             <md-content class="md-padding">
-                                <h1 class="md-display-2">Events</h1>
-
-                                <p ng-click="dashboardCtrl.selectApp()"> neki tekst bzvz </p>
+                                <div class="md-padding" ng-cloak>
+                                    <div>
+                                        <h1 class="md-title">Event</h1>
+                                        <div layout="row">
+                                            <md-input-container>
+                                                <label>Event</label>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                </div>
 
                             </md-content>
                         </md-tab>

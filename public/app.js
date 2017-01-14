@@ -1,5 +1,5 @@
 angular
-    .module("myApp", ["ngRoute", "ngCookies", 'ngMaterial', 'ngMessages'])
+    .module("myApp", ["ngRoute", "ngCookies", 'ngMaterial', 'ngMessages', 'angular.filter'])
     .config(function ($routeProvider) { //defining routes for view and controllers in index.html
         $routeProvider
             .when("/", {
@@ -22,4 +22,20 @@ angular
                 controller: "registerApp",
                 controllerAs: "registerAppCtrl"
             })
+    })
+    .filter("byAppVersion", function() {
+        return function(events, versions) {
+            var retVal = [];
+            if(events === undefined || versions === undefined)
+                return retVal;
+            for(var i = 0; i < events.length; i++) {
+                for(var j = 0; j < versions.length; j++) {
+                    if(events[i].version == versions[j]) {
+                        retVal.push(events[i]);
+                        break;
+                    }
+                }
+            }
+            return retVal;
+        }
     });
