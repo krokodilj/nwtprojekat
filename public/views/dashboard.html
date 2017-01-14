@@ -53,29 +53,44 @@
                         <md-tab label="Fragments">
                             <md-content class="md-padding">
 
-                                <!-- here goes selection by fragments || event.fragment for event in eventsData -->
-                                <select ng-model="selectedFragment" ng-options="event.fragment for event in dashboardCtrl.eventsData | unique:'fragment'"
-                                    id="selectedFragment">
-                                </select>
-                                <!-- FRAGMENTS TABLE-->
+                                <!--IN THIS TAB WE ENABLE FILTERING EVENTS BY FRAGMENT -->
+                                <div class="md-padding" ng-cloak>
+                                    <div>
+                                        <h1 class="md-title">Select Fragment Name Below</h1>
+                                        <div ng-repeat="e in filtered = (dashboardCtrl.eventsData| byFragment:selectedFragments)"></div>
+                                        <p>Number of events: {{filtered.length}}</p>
+                                        
+                                       
+                                        <div layout="row">
+                                            <md-input-container>
+                                                <label>Fragment</label>
+                                                <md-select ng-model="selectedFragments" multiple>
+                                                    <md-option ng-value="event.fragment" ng-repeat="event in dashboardCtrl.eventsData | unique:'fragment'">{{event.fragment}}</md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
 
-                                <table class="table table-hover">
-                                    <thead>
-                                        <th>Event Id</th>
-                                        <th>Stack</th>
-                                        <th>Date</th>
-                                        <th>App Version</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-click="" ng-repeat="e in dashboardCtrl.eventsData| filter:{  fragment : selectedFragment.fragment  }">
-                                            <td>{{e._id}}</td>
-                                            <td>{{e.stack}}</td>
-                                            <td>{{e.date}}</td>
-                                            <td>{{e.__v}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <!--END OF FRAGMENTS TABLE -->
+
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <th>Event Id</th>
+                                                <th>Stack</th>
+                                                <th>Date</th>
+                                                <th>App Version</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-click="" ng-repeat="e in dashboardCtrl.eventsData| byFragment:selectedFragments">
+                                                    <td>{{e._id}}</td>
+                                                    <td>{{e.stack}}</td>
+                                                    <td>{{e.date}}</td>
+                                                    <td>{{e.version}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                         
+                                    </div>
+                                </div>
+                                <!--END OF -->
 
                             </md-content>
                         </md-tab>

@@ -38,4 +38,22 @@ angular
             }
             return retVal;
         }
+    })
+
+    //make filter for fragment type
+    .filter("byFragment", function() {
+        return function(events, fragments) {
+            var retVal = [];
+            if(events === undefined || fragments === undefined)
+                return retVal;
+            for(var i = 0; i < events.length; i++) {
+                for(var j = 0; j < fragments.length; j++) {
+                    if(events[i].fragment == fragments[j]) {
+                        retVal.push(events[i]);
+                        break;
+                    }
+                }
+            }
+            return retVal;
+        }
     });
