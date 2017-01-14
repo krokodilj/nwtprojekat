@@ -155,12 +155,13 @@ router.post('/comment', auth.is_subscribed, function (req, res) {
 
 });
 
-//get all events for given app_id
+//get all events for given params
 router.get('/events',auth.is_logged,function(req,res){
-	var appID = req.query.app_id;
-	Event.find({ 'app': appID}).exec(function(err,events){
+	console.log(req.query);
+	Event.find(req.query).exec(function(err,events){
+		console.log(events);
 		if(err){
-			return res.json({success:false,msg:"Error in fetching events"});
+			return res.json({success:false, msg:"Error in fetching events"});
 		}
 		return res.json({success:true,eventData:{events}});
 	});
