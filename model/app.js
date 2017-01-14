@@ -19,7 +19,6 @@ module.exports = mongoose.model('App',new Schema({
 		ref:'User'
 	}]
 
-
 	
 
 	

@@ -155,6 +155,17 @@ router.post('/comment', auth.is_subscribed, function (req, res) {
 
 });
 
+//get all events for given app_id
+router.get('/events',auth.is_logged,function(req,res){
+	var appID = req.query.app_id;
+	Event.find({ 'app': appID}).exec(function(err,events){
+		if(err){
+			return res.json({success:false,msg:"Error in fetching events"});
+		}
+		return res.json({success:true,eventData:{events}});
+	});
+});
+
 //delete comment
 //must be comment author
 router.delete('/comment', auth.is_comment_author, function (req, res) {

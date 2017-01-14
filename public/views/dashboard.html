@@ -52,11 +52,42 @@
                         </md-tab>
                         <md-tab label="Fragments">
                             <md-content class="md-padding">
-                                <h1 class="md-display-2">Fragments</h1>
+                               
+                                <!-- here goes selection by fragments || event.fragment for event in eventsData -->
+                                <select ng-model="selectedFragment" ng-options="event.fragment for event in dashboardCtrl.eventsData" id="selectedFragment">
+                                </select> 
+                               <!-- FRAGMENTS TABLE-->
+                               <div>{{selectedFragment.stack}}</div>
 
-
+                               <table class="table table-hover">
+                                    <thead>
+                                        <th>Event Id</th>
+                                        <th>Stack</th>
+                                        <th>Date</th>
+                                        <th>App Version</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-click="" ng-repeat="e in dashboardCtrl.eventsData| filter:{  fragment : selectedFragment.fragment  }">
+                                            <td>{{e._id}}</td>
+                                            <td>{{e.stack}}</td>
+                                            <td>{{e.date}}</td>
+                                            <td>{{e.__v}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                               <!--END OF FRAGMENTS TABLE -->
+                                
                             </md-content>
                         </md-tab>
+                        <md-tab label="Versions">
+                            <md-content class="md-padding">
+                                <h1 class="md-display-2">Versions</h1>
+
+                                <p ng-click="dashboardCtrl.selectApp()"> neki tekst bzvz </p>
+
+                            </md-content>
+                        </md-tab>  
+
                         <md-tab label="Events">
                             <md-content class="md-padding">
                                 <h1 class="md-display-2">Events</h1>

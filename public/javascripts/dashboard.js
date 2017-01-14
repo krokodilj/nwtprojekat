@@ -27,7 +27,14 @@
             console.log(appId);
             vm.selectedAppId = appId;
             vm.selectedIndex = 1;
+             $http.get("/api/events?app_id="+vm.selectedAppId, { headers: {'x-access-token': $cookies.get("token") }}).then(function(response){
+                //put the array of events inside eventsData
+                vm.eventsData = response.data.eventData.events;
+                console.log(vm.eventsData);
+            });
         }
+
+
 
     }
 })();
