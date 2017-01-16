@@ -29,7 +29,18 @@ var schema = new Schema({
 
 schema.pre('save', function (next) {
     this.date = new Date();
+    next();
+});
 
+schema.pre('findOne', function (next) {
+    this.populate('commentId');
+    this.populate('author')
+    next();
+});
+
+schema.pre('find', function (next) {
+    this.populate('commentId');
+    this.populate('author');
     next();
 });
 

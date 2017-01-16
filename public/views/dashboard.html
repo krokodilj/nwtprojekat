@@ -25,7 +25,7 @@
                                         <th>Repository</th>
                                     </thead>
                                     <tbody>
-                                        <tr ng-click="dashboardCtrl.selectApp(app._id)" ng-repeat="app in dashboardCtrl.admin_apps">
+                                        <tr ng-click="dashboardCtrl.selectApp(app)" ng-repeat="app in dashboardCtrl.admin_apps">
                                             <td>{{app._id}}</td>
                                             <td>{{app.name}}</td>
                                             <td>{{app.version}}</td>
@@ -79,7 +79,7 @@
                                                 <th>App Version</th>
                                             </thead>
                                             <tbody>
-                                                <tr ng-click="dashboardCtrl.selectEvent(e._id)" ng-repeat="e in dashboardCtrl.eventsData| byFragment:selectedFragments">
+                                                <tr ng-click="dashboardCtrl.selectEvent(e)" ng-repeat="e in dashboardCtrl.eventsData| byFragment:selectedFragments">
                                                     <td>{{e._id}}</td>
                                                     <td>{{e.stack}}</td>
                                                     <td>{{e.date}}</td>
@@ -96,6 +96,7 @@
                         </md-tab>
                         <md-tab label="App Version">
                             <md-content class="md-padding">
+                                <!--IN THIS TAB WE ENABLE FILTERING EVENTS BY APP VERSION -->
                                 <div class="md-padding" ng-cloak>
                                     <div>
                                         <h1 class="md-title">Select Application Version Below</h1>
@@ -116,7 +117,7 @@
                                                 <th>App Version</th>
                                             </thead>
                                             <tbody>
-                                                <tr ng-click="" ng-repeat="e in dashboardCtrl.eventsData| byAppVersion:selectedVersions">
+                                                <tr ng-click="dashboardCtrl.selectEvent(e)" ng-repeat="e in dashboardCtrl.eventsData| byAppVersion:selectedVersions">
                                                     <td>{{e._id}}</td>
                                                     <td>{{e.stack}}</td>
                                                     <td>{{e.date}}</td>
@@ -130,38 +131,94 @@
                         </md-tab>
                         <md-tab label="Event">
                             <md-content class="md-padding">
+                                <!--EVENT TAB-->
                                 <div class="md-padding" ng-cloak>
                                     <div>
-                                        <h1 class="md-title">Event</h1>
-                                        <div layout="row">
-                                            <md-input-container>
-                                                <label>Event</label>
-                                            </md-input-container>
+                                        <h1 class="md-title">Event Details</h1>
+
+                                        <md-list>
+                                            <md-divider></md-divider>
+                                            <md-list-item class="md-2-line">
+                                                <div class="md-list-item-text">
+                                                    <p>Application that fired the event:</p>
+                                                    <h3>{{dashboardCtrl.selectedApp.name}}</h3>
+                                                </div>
+                                            </md-list-item>
+                                            <md-divider></md-divider>
+                                            <md-list-item class="md-2-line">
+                                                <div class="md-list-item-text">
+                                                    <p>Application version in time of the event:</p>
+                                                    <h3>{{dashboardCtrl.selectedEvent.version}}</h3>
+                                                </div>
+                                            </md-list-item>
+                                            <md-divider></md-divider>
+                                            <md-list-item class="md-2-line">
+                                                <div class="md-list-item-text">
+                                                    <p>Application fragment:</p>
+                                                    <h3>{{dashboardCtrl.selectedEvent.fragment}}</h3>
+                                                </div>
+                                            </md-list-item>
+                                            <md-divider></md-divider>
+                                            <md-list-item class="md-2-line">
+                                                <div class="md-list-item-text">
+                                                    <p>Time of the event:</p>
+                                                    <h3>{{dashboardCtrl.selectedEvent.date}}</h3>
+                                                </div>
+                                            </md-list-item>
+                                            <md-divider></md-divider>
+                                            <md-list-item class="md-2-line">
+                                                <div class="md-list-item-text">
+                                                    <p>Event stack:</p>
+                                                    <div style="border-style:solid; padding:3px; border-radius:2px; background:white; border-width:1px; border-color:gray;">
+                                                        <h5 style="color:red; font-family: 'Lucida Console', 'Lucida Sans Typewriter', monaco, 'Bitstream Vera Sans Mono', monospace;">{{dashboardCtrl.selectedEvent.stack}}</h5>
+                                                    </div>
+                                                </div>
+                                            </md-list-item>
+                                            <md-divider></md-divider>
+                                        </md-list>
+                                        <md-input-container class="md-block">
+                                            <label>Post a comment (press ENTER to send):</label>
+                                            <textarea id="commentArea" ng-keyup="$event.keyCode == 13 && dashboardCtrl.postComment(dashboardCtrl.commentData)" ng-model="dashboardCtrl.commentData" md-maxlength="150" rows="5"></textarea>
+                                        </md-input-container>
+
+                                        <div ng-cloak="">
+                                            <md-toolbar class="md-theme-light">
+                                                <h2 class="md-toolbar-tools">
+                                                    <span>Comments</span>
+                                                </h2>
+                                            </md-toolbar>
+
+                                            <md-content>
+                                                <md-list>
+                                                    <md-list-item class="md-3-line" ng-repeat="comment in dashboardCtrl.comments">
+                                                        <div class="md-list-item-text">
+                                                            <h4 ng-style="{'color':'navy'}">{{comment.author.username}}</h4>
+                                                            <h3>{{comment.data}}</h3>
+                                                            <p>{{comment.date}}</p>
+                                                            <md-list>
+                                                                <md-list-item ng-style="{'margin-left':'30px'}" class="md-3-line" ng-repeat="subcomment in comment.commentId">
+                                                                    <div class="md-list-item-text">
+                                                                        <h4 ng-style="{'color':'navy'}">{{subcomment.author.username}}</h4>
+                                                                        <h3>{{subcomment.data}}</h3>
+                                                                        <p>{{subcomment.date}}</p>
+
+                                                                    </div>
+                                                                    <md-button class="md-secondary md-raised" ng-click="dashboardCtrl.showPrompt($event, comment._id)">
+                                                                        Respond
+                                                                    </md-button>
+                                                                </md-list-item>
+                                                            </md-list>
+                                                        </div>
+                                                        <md-divider ng-if="!$last"></md-divider>
+                                                    </md-list-item>
+                                                </md-list>
+                                            </md-content>
                                         </div>
-                                            <!-- ovde sadrzaj -->
-                                        </div>
+
                                     </div>
                                 </div>
-
                             </md-content>
                         </md-tab>
-
-                        <md-tab label="Comments">
-                            <md-content class="md-padding">
-                                <div class="md-padding" ng-cloak>
-                                    <div>
-                                        <h1 class="md-title">Please leave a comment</h1>
-                                        <div layout="row">
-                                            <md-input-container>
-                                                <label>Comments</label>
-                                            </md-input-container>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </md-content>
-                        </md-tab>
-
                     </md-tabs>
                 </md-content>
             </div>

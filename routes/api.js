@@ -135,6 +135,7 @@ router.post('/app/errorlog', function (req, res) {
 });
 
 //post a new comment on a comment or event
+//{"comment":{"author" : "5840beca49e12532545d92c8", "data" : "cetvrti podkoment AAAAAA"},"commentId" :"587a8e272ab1b0316044270d"}
 router.post('/comment', auth.is_logged, function (req, res) {
     var comment = new Comment(req.body.comment);
 
@@ -166,7 +167,7 @@ router.post('/comment', auth.is_logged, function (req, res) {
             //add comment to commentID of existing comment
             Comment.findOne(queryComment).exec(function (err, comm) {
                 if (err)
-                    return res.json({ success: false, msg: "Error in fatching comment" });
+                    return res.json({ success: false, msg: "Error in fetching comment" });
                 comm.commentId.push(comment._id);
                 /*console.log(comment._id);
                 console.log(comm);*/
@@ -180,10 +181,7 @@ router.post('/comment', auth.is_logged, function (req, res) {
         });
     }
 
-
 });
-
-
 
 //get all events for given params
 router.get('/events', auth.is_logged, function (req, res) {
@@ -214,26 +212,14 @@ router.delete('/comment', auth.is_comment_author, function (req, res) {
     });
 });
 
-
 //get list of comments given the eventId query
 router.get("/comments", auth.is_logged, function (req, res) {
 
-    //naci sve komentare za odredjeni event (komentari koji imaju eventId koji odgovara prosledjenom eventu)
-    Comment.find(req.query).populate('commentId').exec(function (err, comments) {
-        //prodji kroz sve komentare koji se odnose na event i nadji komentare koji se odnose na njih
-        /*for (var i = 0; i < comments.length; i++) {
-            console.log(i);
-            Comment.find({"commentId": comments[i]._id}).exec(function (err, temp) {
-                if(!err) {
-                    console.log("drugi put:" + i);
-                    comments[i].subComments = temp;
-                }
-            });
-        }*/
+    Comment.find(req.query).exec(function (err, comments) {
         if (err) {
             return res.json({ success: false, msg: "No comments" });
         }
-        return res.json({ success: true, commentsData: { comments } });
+        return res.json({ success: true, commentsData: comments  });
     });
 });
 

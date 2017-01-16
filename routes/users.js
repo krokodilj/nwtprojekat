@@ -79,7 +79,7 @@ router.post('/dashboard',auth.is_logged,function(req,res){
 			res.json({success:false,msg:"problems in finding user"});
 		} else{
 			//return json with user data
-			res.json({success:true, userdata:{first_name:user.first_name, last_name: user.last_name, email: user.email, username: user.username}
+			res.json({success:true, userdata:{_id:user._id, first_name:user.first_name, last_name: user.last_name, email: user.email, username: user.username}
 		    , subscribed_apps: user.subscribed_apps, admin_apps: user.admin_apps});
 		}
 	});	
