@@ -160,18 +160,15 @@ router.post('/comment', auth.is_logged, function (req, res) {
         });
     }
     else if (req.body.commentId) {
-        var queryComment = { "_id": req.body.commentId };
         comment.save(function (err) {
             if (err)
                 res.json({ success: false, msg: "Error in saving comment" });
             //add comment to commentID of existing comment
-            Comment.findOne(queryComment).exec(function (err, comm) {
+            Comment.findOne({ "_id": req.body.commentId }).exec(function (err, parent) {
                 if (err)
                     return res.json({ success: false, msg: "Error in fetching comment" });
-                comm.commentId.push(comment._id);
-                /*console.log(comment._id);
-                console.log(comm);*/
-                comm.save(function (err) {
+                parent.commentId.push(comment._id);
+                parent.save(function (err) {
                     if (err)
                         return res.json({ success: false, msg: "Error in saving comment" });
                     return res.json({ success: true, msg: "Comment saved" });
@@ -185,9 +182,7 @@ router.post('/comment', auth.is_logged, function (req, res) {
 
 //get all events for given params
 router.get('/events', auth.is_logged, function (req, res) {
-    console.log(req.query);
     Event.find(req.query).exec(function (err, events) {
-        console.log(events);
         if (err) {
             return res.json({ success: false, msg: "Error in fetching events" });
 
@@ -199,27 +194,28 @@ router.get('/events', auth.is_logged, function (req, res) {
 //delete comment
 //must be comment author
 router.delete('/comment', auth.is_comment_author, function (req, res) {
-    require('mongodb').MongoClient.connect(config.database, function (err, db) {
+    var id = req.query.id;
+    Comment.find({ "_id": id }).exec(function (err, comment) {
         if (err) {
-            return res.json({ success: false, msg: "bad database connection" });
+            return res.json({ success: false, msg: "No comments" });
         }
-        else {
-            var collection = db.collection('comments');
-            collection.remove(require('mongodb').ObjectID(req.body.comment._id));
-            db.close();
-            return res.json({ success: true });
-        }
+        Comment.remove({"_id" : id}).exec(function (err) {
+            if (!err) {
+                return res.json({ success: true });
+            };
+        });
     });
 });
 
 //get list of comments given the eventId query
 router.get("/comments", auth.is_logged, function (req, res) {
 
-    Comment.find(req.query).exec(function (err, comments) {
+    console.log(req.query)
+    Comment.find(req.query).populate('commentId').exec(function (err, comments) {
         if (err) {
             return res.json({ success: false, msg: "No comments" });
         }
-        return res.json({ success: true, commentsData: comments  });
+        return res.json({ success: true, commentsData: comments });
     });
 });
 

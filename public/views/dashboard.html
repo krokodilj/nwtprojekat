@@ -178,7 +178,8 @@
                                         </md-list>
                                         <md-input-container class="md-block">
                                             <label>Post a comment (press ENTER to send):</label>
-                                            <textarea id="commentArea" ng-keyup="$event.keyCode == 13 && dashboardCtrl.postComment(dashboardCtrl.commentData)" ng-model="dashboardCtrl.commentData" md-maxlength="150" rows="5"></textarea>
+                                            <textarea id="commentArea" ng-keyup="$event.keyCode == 13 && dashboardCtrl.postComment(dashboardCtrl.commentData)" ng-model="dashboardCtrl.commentData"
+                                                md-maxlength="150" rows="5"></textarea>
                                         </md-input-container>
 
                                         <div ng-cloak="">
@@ -201,14 +202,22 @@
                                                                         <h4 ng-style="{'color':'navy'}">{{subcomment.author.username}}</h4>
                                                                         <h3>{{subcomment.data}}</h3>
                                                                         <p>{{subcomment.date}}</p>
-
+                                                                        <md-button class="md-warn md-raised" ng-style="{'margin-left' : '0'}" ng-click="dashboardCtrl.removeComment(subcomment)" ng-if="subcomment.author._id == dashboardCtrl.userdata._id">
+                                                                            Remove
+                                                                        </md-button>
                                                                     </div>
-                                                                    <md-button class="md-secondary md-raised" ng-click="dashboardCtrl.showPrompt($event, comment._id)">
-                                                                        Respond
-                                                                    </md-button>
+
                                                                 </md-list-item>
                                                             </md-list>
+                                                            <md-button class="md-warn md-raised" ng-style="{'margin-left' : '0'}" ng-click="dashboardCtrl.removeComment(comment)" ng-if="comment.author._id == dashboardCtrl.userdata._id">
+                                                                Remove
+                                                            </md-button>
+                                                            <md-button class="md-primary md-raised" ng-style="{'margin-left' : '0'}" ng-click="dashboardCtrl.showPrompt($event, comment._id)">
+                                                                Respond
+                                                            </md-button>
                                                         </div>
+
+
                                                         <md-divider ng-if="!$last"></md-divider>
                                                     </md-list-item>
                                                 </md-list>

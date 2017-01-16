@@ -12,8 +12,8 @@
         vm.showPrompt = showPrompt;
         vm.postComment = postComment;
         vm.displayMsg = displayMsg;
+        vm.removeComment = removeComment;
         $scope.indexCtrl.loggedIn = true; //user is logged in set to true
-        console.log($cookies.getAll())
 
         $http.post("/users/dashboard", $cookies.getObject("userdata"), { headers: { 'x-access-token': $cookies.get("token") } }).then(function (response) {
 
@@ -44,7 +44,7 @@
 
                 //put the array of events inside eventsData
                 vm.eventsData = response.data.eventData.events;
-                console.log(vm.eventsData);
+               
             });
         }
 
@@ -56,6 +56,14 @@
             getAllComments(event);
         }
 
+        function getAllComments(event) {
+            $http.get("/api/comments", { params: { "eventId": event._id }, headers: { 'x-access-token': $cookies.get("token") } }).then(function (response) {
+                //put comments on scope
+                vm.comments = response.data.commentsData;
+                console.log(vm.comments);
+            });
+        }
+
         function showPrompt(ev, commentId) {
 
             var confirm = $mdDialog.prompt()
@@ -65,30 +73,22 @@
                 .targetEvent(ev)
                 .ok('Send!')
                 .cancel('Dismiss');
-
+            
             $mdDialog.show(confirm).then(function (result) {
-
+                //"comment" je sadrzaj commentara, "commentId" je id commentara na koji se ovaj odnosi
                 var params = { "comment": { "author": vm.userdata._id, "data": result }, "commentId": commentId };
                 $http.post("/api/comment", params, { headers: { 'x-access-token': $cookies.get("token") } }).then(function (response) {
 
-                    getAllComments(vm.selectedEvent._id);
+                    getAllComments(vm.selectedEvent);
                     displayMsg('Comment successfully sent!');
                 });
             });
         };
 
-        function getAllComments(event) {
-            $http.get("/api/comments", { params: { "eventId": event._id }, headers: { 'x-access-token': $cookies.get("token") } }).then(function (response) {
-                //put comments on scope
-                vm.comments = response.data.commentsData;
-            });
-        }
-
         function postComment(data) {
-            console.log('funct gets called');
             var params = { "comment": { "author": vm.userdata._id, "data": data }, "eventId": vm.selectedEvent._id };
             $http.post("/api/comment", params, { headers: { 'x-access-token': $cookies.get("token") } }).then(function (response) {
-                getAllComments(vm.selectedEvent._id);
+                getAllComments(vm.selectedEvent);
                 $("#commentArea").val("");
                 $("#commentArea").blur();
 
@@ -105,9 +105,14 @@
                     .ariaLabel('Alert Dialog Demo')
                     .ok('Got it!')
             );
-
         }
 
+        function removeComment(comment) {
+            $http.delete("/api/comment", { params: { "id": comment._id }, headers: { 'x-access-token': $cookies.get("token") }}).then(function (response) {
+                displayMsg('Comment successfully removed!');
+                getAllComments(vm.selectedEvent);
+            });
+        }
 
     }
 })();

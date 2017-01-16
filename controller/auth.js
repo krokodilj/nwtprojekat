@@ -1,6 +1,7 @@
 var jwt = require('jsonwebtoken');
 var config = require('../config');
 var User = require('../model/user');
+var Comment = require('../model/comment');
 
 var Auth = {
 	is_logged: function (req, res, next) {
@@ -59,22 +60,19 @@ var Auth = {
 	},
 
 	is_comment_author: function (req, res, next) {
-		require('mongodb').MongoClient.connect(config.database, function (err, db) {
+		var id = req.query.id;
+		Comment.find({ "_id": id }).populate('author').exec(function (err, comment) {
 			if (err) {
-				res.json({ success: false, msg: "bad database connection" });
+				return res.json({ success: false, msg: "No comments" });
 			}
-			else {
-				var collection = db.collection('comments');
-				collection.find(require('mongodb').ObjectID(req.body.comment._id)).forEach(function (comment) {
-					if (comment.author == req.user._id) {
-						next();
-						db.close();
-					}
-					else {
-						return res.json({ success: false, msg: "user is not an author of the comment" });
-					}
-				});
+			console.log(comment);
+			for (var i = 0; i < comment.length; i++) {
+				if (comment[i].author._id == req.user._id) {
+					next();
+					return;
+				}
 			}
+			return res.json({ success: false, msg: "user is not an author of the comment" });
 		});
 
 	}
