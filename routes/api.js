@@ -22,6 +22,20 @@ router.post('/', function (req, res) {
     })
 });
 
+router.get('/app/:id',function(req,res){
+    var app_id=req.params.id;
+
+    App.findOne({_id:app_id},function(err,app){
+        if(err){
+            console.log(err)
+            res.json({ success: false });
+        }else{
+            res.json({ success: true ,app_data:app});
+        }
+    })
+
+})
+
 //register new app
 router.post('/app/add', function (req, res) {
     var app = new App(req.body);
