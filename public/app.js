@@ -1,6 +1,6 @@
 angular
     .module("myApp", ["ngRoute", "ngCookies", 'ngMaterial', 'ngMessages', 'angular.filter'])
-    .config(function ($routeProvider) { //defining routes for view and controllers in index.html
+    .config(function ($routeProvider ) { //defining routes for view and controllers in index.html
         $routeProvider
             .when("/", {
                 templateUrl: "views/login.html",
@@ -21,6 +21,11 @@ angular
                 templateUrl: "views/registerApp.html",
                 controller: "registerApp",
                 controllerAs: "registerAppCtrl"
+            })
+            .when("/app/:id",{
+                templateUrl:"views/app.html",
+                controller:"appController",
+                controllerAs:"appCtrl"
             })
     })
     .filter("byAppVersion", function() {
