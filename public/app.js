@@ -27,6 +27,11 @@ angular
                 controller:"appController",
                 controllerAs:"appCtrl"
             })
+            .when("/event/:id",{
+                templateUrl:"views/event.html",
+                controller:"eventController",
+                controllerAs:"eventCtrl"
+            })
     })
     .filter("byAppVersion", function() {
         return function(events, versions) {

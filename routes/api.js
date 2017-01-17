@@ -196,7 +196,7 @@ router.post('/comment', auth.is_logged, function (req, res) {
 
 //get all events for given params
 router.get('/events', auth.is_logged, function (req, res) {
-    Event.find(req.query).exec(function (err, events) {
+    Event.find(req.query).populate('app').exec(function (err, events) {
         if (err) {
             return res.json({ success: false, msg: "Error in fetching events" });
 
