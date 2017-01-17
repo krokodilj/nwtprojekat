@@ -33,6 +33,7 @@ angular
                 controllerAs:"eventCtrl"
             })
     })
+    //filtering by appVersion
     .filter("byAppVersion", function() {
         return function(events, versions) {
             var retVal = [];
@@ -49,8 +50,7 @@ angular
             return retVal;
         }
     })
-
-    //make filter for fragment type
+    //filtering by app fragment
     .filter("byFragment", function() {
         return function(events, fragments) {
             var retVal = [];

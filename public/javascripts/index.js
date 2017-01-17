@@ -6,10 +6,8 @@
     function indexController($cookies, $http, $window) {
 
         var vm = this;
-        //is user logged in
-        vm.loggedIn = false;
-        //login and logout methods
-        vm.logout = logout;
+        vm.loggedIn = false;    //is user logged in
+        vm.logout = logout;     //login and logout methods
         vm.login = login;
 
         //method for deleting user data - cookies

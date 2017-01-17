@@ -6,48 +6,50 @@
 
         var vm = this;
 
-        vm.selectedIndex = 0; // index of selected tab in view
-        vm.selectApp = selectApp;
-        vm.selectEvent = selectEvent;
-        vm.showPrompt = showPrompt;
-        vm.postComment = postComment;
-        vm.displayMsg = displayMsg;
-        vm.removeComment = removeComment;
-        $scope.indexCtrl.loggedIn = true; //user is logged in set to true
+        vm.selectedIndex = 0;               // currently selected Tab
+        vm.selectedApp;                     // currently selected App
+        vm.eventsData;                      // currently selected App's Events
+        vm.selectedEvent;                   // currently selected Event
+        vm.comments;                        // currently selected Event's Comments
 
+        vm.selectApp = selectApp;           // function for App selection
+        vm.selectEvent = selectEvent;       // function for Event selection
+        vm.showPrompt = showPrompt;         // function to display Comment input prompt
+        vm.postComment = postComment;       // function for Comment posting
+        vm.displayMsg = displayMsg;         // display text to user
+        vm.removeComment = removeComment;   // function for Comment removal
+        $scope.indexCtrl.loggedIn = true;   //user is logged in set to true
+
+        //load all user data from provided token
         $http.post("/users/dashboard", $cookies.getObject("userdata"), { headers: { 'x-access-token': $cookies.get("token") } }).then(function (response) {
 
+            //put all user data in cookie
             $cookies.putObject("userdata", response.data.userdata);
             $cookies.putObject("subscribed_apps", response.data.subscribed_apps);
             $cookies.putObject("admin_apps", response.data.admin_apps);
 
-            vm.userdata = response.data.userdata;
-            vm.subscribed_apps = response.data.subscribed_apps;
-            vm.admin_apps = response.data.admin_apps;
-
-            if (vm.admin_apps.length > 0) {
-                selectApp(vm.admin_apps[0]);
-            }
-            else {
-                if (vm.subscribed_apps.length > 0) {
-                    selectApp(vm.subscribed_apps[0]);
-                }
-            }
+            //put all user data in scope
+            vm.userdata = response.data.userdata;                   //user data
+            vm.subscribed_apps = response.data.subscribed_apps;     //apps user is subscribed to
+            vm.admin_apps = response.data.admin_apps;               //apps user is admin of
 
         });
 
-        function selectApp(app) {
+        //select one App on click, save App to scope and its Events
+        function selectApp(app, e) {
+
+            if(e) {
+                $(e.currentTarget).addClass('info').siblings().removeClass('info');
+            }
             console.log(app);
             vm.selectedApp = app;
 
             $http.get("/api/events", { params: { "app": app._id }, headers: { 'x-access-token': $cookies.get("token") } }).then(function (response) {
-
-                //put the array of events inside eventsData
                 vm.eventsData = response.data.eventData.events;
-               
             });
         }
 
+        //select one Event on click, save Event to scope and call 'getAllComments' function
         function selectEvent(event) {
             console.log(event);
             vm.selectedEvent = event;
@@ -56,14 +58,15 @@
             getAllComments(event);
         }
 
+        //fetches all Comments for provided Event
         function getAllComments(event) {
             $http.get("/api/comments", { params: { "eventId": event._id }, headers: { 'x-access-token': $cookies.get("token") } }).then(function (response) {
                 //put comments on scope
                 vm.comments = response.data.commentsData;
-                console.log(vm.comments);
             });
         }
 
+        //display Comment Input prompt, used only for Comment Response
         function showPrompt(ev, commentId) {
 
             var confirm = $mdDialog.prompt()
@@ -85,6 +88,7 @@
             });
         };
 
+        //post Comment for Event
         function postComment(data) {
             var params = { "comment": { "author": vm.userdata._id, "data": data }, "eventId": vm.selectedEvent._id };
             $http.post("/api/comment", params, { headers: { 'x-access-token': $cookies.get("token") } }).then(function (response) {
@@ -96,6 +100,7 @@
             });
         }
 
+        //display some message to user
         function displayMsg(data) {
 
             $mdDialog.show(
@@ -107,6 +112,7 @@
             );
         }
 
+        //remove Comment with provided ID
         function removeComment(comment) {
             $http.delete("/api/comment", { params: { "id": comment._id }, headers: { 'x-access-token': $cookies.get("token") }}).then(function (response) {
                 displayMsg('Comment successfully removed!');
