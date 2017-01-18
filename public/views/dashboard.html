@@ -235,5 +235,43 @@
                 </md-content>
             </div>
         </div>
+
+        <!-- subscribe user -->
+        <div class="col-md-2" >
+                select an admin app<br>
+                search for user<br>
+                press ENTER to subscribe him on selected app
+                <div  layout="column" ng-cloak>
+                  <md-content layout-padding layout="column">
+                    <form ng-submit="dashboardCtrl.submit()">
+                      <md-autocomplete
+                          ng-disabled="dashboardCtrl.isDisabled"
+                          md-no-cache="dashboardCtrl.noCache"
+                          md-selected-item="dashboardCtrl.selectedItem"
+                          md-search-text-change="dashboardCtrl.searchTextChange(dashboardCtrl.searchText)"
+                          md-search-text="dashboardCtrl.searchText"
+                          md-selected-item-change="dashboardCtrl.selectedItemChange(item)"
+                          md-items="item in dashboardCtrl.querySearch(dashboardCtrl.searchText)"
+                          md-item-text="item.username"
+                          md-min-length="0"
+                          placeholder="Select a user"
+                          md-menu-class="autocomplete-custom-template">
+                        <md-item-template>
+                            <span class="item-title">
+            
+                                <span> {{item.username}} </span>
+                              </span>
+                              <span class="item-metadata">
+                                <span class="item-metastat">
+                                  email: <strong>{{item.email}}</strong> 
+                                </span>
+                                
+                              </span>
+                        </md-item-template>
+                      </md-autocomplete>
+                    </form>
+                  </md-content>
+                </div>
+            </div>
     </div>
 </div>
