@@ -11,7 +11,8 @@
         vm.eventsData;                      // currently selected App's Events
         vm.selectedEvent;                   // currently selected Event
         vm.comments;                        // currently selected Event's Comments
-
+        
+        vm.showGraph = showGraph;           // function for display number of events by days of the same fragment
         vm.selectApp = selectApp;           // function for App selection
         vm.selectEvent = selectEvent;       // function for Event selection
         vm.showPrompt = showPrompt;         // function to display Comment input prompt
@@ -172,6 +173,53 @@
             alert(JSON.stringify(response))
           });
 
+        }
+
+        function showGraph(data) {
+            
+            FusionCharts.ready(function () {
+                var revenueChart = new FusionCharts({
+                    type: 'line',
+                    renderAt: 'chartContainer',
+                    width: '650',
+                    height: '450',
+                    dataFormat: 'json',
+                    dataSource: {
+                        "chart": {
+                            "xaxisname": "Date",
+                            "yaxisname": "Number of events per day",
+                            "alternatehgridalpha": "5",
+                            "anchorbgcolor": "BBDA00",
+                            "anchorbordercolor": "FFFFFF",
+                            "anchorborderthickness": "2",
+                            "anchorradius": "4",
+                            "basefontcolor": "FFFFFF",
+                            "bgalpha": "100",
+                            "bgcolor": "406181, 6DA5DB",
+                            "canvasbgalpha": "0",
+                            "canvasbordercolor": "FFFFFF",
+                            "canvaspadding": "10",
+                            "caption": "Time distribution of events with the same fragment",
+                            "divlinealpha": "100",
+                            "divlinecolor": "FFFFFF",
+                            "labeldisplay": "ROTATE",
+                            "linecolor": "BBDA00",
+                            "numbersuffix": " ",
+                            "numvdivlines": "10",
+                            "showalternatevgridcolor": "1",
+                            "showborder": "0",
+                            "showvalues": "0",
+                            "tooltipbgcolor": "406181",
+                            "tooltipbordercolor": "406181",
+                            "vdivlineisdashed": "1",
+                            "vdivlinecolor": "#ffffff",
+                            "vdivlinealpha": "100",
+                            "animation": "0"
+                        },            
+                        "data": data
+                    }
+                }).render();
+            });
         }
 
     }

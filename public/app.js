@@ -52,18 +52,57 @@ angular
     })
     //filtering by app fragment
     .filter("byFragment", function() {
-        return function(events, fragments) {
+        return function(events, fragment) {
             var retVal = [];
-            if(events === undefined || fragments === undefined)
+            if(events === undefined || fragment === undefined)
                 return retVal;
             for(var i = 0; i < events.length; i++) {
-                for(var j = 0; j < fragments.length; j++) {
-                    if(events[i].fragment == fragments[j]) {
+                
+                    if(events[i].fragment == fragment) {
                         retVal.push(events[i]);
-                        break;
+                        
                     }
-                }
+                
             }
+            return retVal;
+        }
+    })
+
+    //make filter by days
+    .filter("byDays", function() {
+        return function(events, fragment) {
+            
+            var retVal = [];
+            if(events === undefined || fragment === undefined)
+                return retVal;
+            
+            for(var i = 0; i < events.length; i++) {
+                    
+                    if(events[i].fragment == fragment) {
+                        
+                        var exists = false;
+                        var date = events[i].date.split('T')[0]
+                        
+                        for(var j=0; j<retVal.length; j++){
+                            if(retVal[j]['label']==date){
+                                retVal[j]['value'] +=1;
+                                exists = true;
+                            }
+                                
+                        }
+    
+                        if(!exists){
+                            var item = {"label": date, "value":1}
+                            retVal.push(item);
+                        }
+                        
+                        
+                    }
+                
+            }
+            retVal.sort(function (a, b) {
+                return new Date(a.label) - new Date(b.label);
+            });
             return retVal;
         }
     });

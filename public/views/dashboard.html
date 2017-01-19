@@ -28,8 +28,7 @@
                                         <th>Repository</th>
                                     </thead>
                                     <tbody>
-                                        <tr ng-click="dashboardCtrl.selectApp(app, $event)" class="clickable-row"  
-                                        ng-repeat="app in dashboardCtrl.admin_apps">
+                                        <tr ng-click="dashboardCtrl.selectApp(app, $event)" class="clickable-row" ng-repeat="app in dashboardCtrl.admin_apps">
                                             <td>{{app.name}}</td>
                                             <td>{{app.version}}</td>
                                             <td>{{app.repo}}</td>
@@ -45,8 +44,7 @@
                                         <th>Repository</th>
                                     </thead>
                                     <tbody>
-                                        <tr ng-click="dashboardCtrl.selectApp(app)" 
-                                        ng-repeat="app in dashboardCtrl.subscribed_apps">
+                                        <tr ng-click="dashboardCtrl.selectApp(app)" ng-repeat="app in dashboardCtrl.subscribed_apps">
                                             <td>{{app.name}}</td>
                                             <td>{{app.version}}</td>
                                             <td>{{app.repo}}</td>
@@ -63,32 +61,47 @@
                                 <div class="md-padding" ng-cloak>
                                     <div>
                                         <h1 class="md-title">Select Fragment Name Below</h1>
-                                        <div ng-repeat="e in filtered = (dashboardCtrl.eventsData| byFragment:selectedFragments)"></div>
+                                        <div ng-repeat="e in filtered = (dashboardCtrl.eventsData| byFragment:selectedFragment)"></div>
                                         <p>Number of events: {{filtered.length}}</p>
                                         <div layout="row">
                                             <md-input-container>
                                                 <label>Fragment</label>
-                                                <md-select ng-model="selectedFragments" multiple>
-                                                    <md-option selected ng-value="event.fragment" ng-repeat="event in dashboardCtrl.eventsData | unique:'fragment'">{{event.fragment}}</md-option>
+
+                                                <md-select ng-model="selectedFragment">
+                                                    <md-option ng-value="event.fragment" ng-repeat="event in dashboardCtrl.eventsData | unique:'fragment'" ng-click="dashboardCtrl.showGraph(dashboardCtrl.eventsData| byDays:event.fragment)">{{event.fragment}}</md-option>
                                                 </md-select>
                                             </md-input-container>
                                         </div>
-                                        <table class="table table-hover">
-                                            <thead>
-                                                <th>Event Id</th>
-                                                <th>Stack</th>
-                                                <th>Date</th>
-                                                <th>App Version</th>
-                                            </thead>
-                                            <tbody>
-                                                <tr ng-click="dashboardCtrl.selectEvent(e)" ng-repeat="e in dashboardCtrl.eventsData| byFragment:selectedFragments">
-                                                    <td>{{e._id}}</td>
-                                                    <td>{{e.stack}}</td>
-                                                    <td>{{e.date}}</td>
-                                                    <td>{{e.version}}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+
+                                        <md-tabs md-selected="0">
+                                            <md-tab label="Events">
+                                                <md-content class="md-padding">
+
+                                                    <table class="table table-hover">
+                                                        <thead>
+                                                            <th>Event Id</th>
+                                                            <th>Stack</th>
+                                                            <th>Date</th>
+                                                            <th>App Version</th>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-click="dashboardCtrl.selectEvent(e)" ng-repeat="e in dashboardCtrl.eventsData| byFragment:selectedFragment">
+                                                                <td>{{e._id}}</td>
+                                                                <td>{{e.stack}}</td>
+                                                                <td>{{e.date}}</td>
+                                                                <td>{{e.version}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </md-content>
+                                            </md-tab>
+
+                                            <!-- tab za prikaz graph-a -->
+                                            <md-tab label="Graph">
+                                                <md-content class="md-padding">
+                                                    <div id="chartContainer"></div>
+                                                </md-content>
+                                            </md-tab>
 
                                     </div>
                                 </div>
@@ -205,7 +218,8 @@
                                                                         <h4 ng-style="{'color':'navy'}">{{subcomment.author.username}}</h4>
                                                                         <h3>{{subcomment.data}}</h3>
                                                                         <p>{{subcomment.date}}</p>
-                                                                        <md-button class="md-warn md-raised" ng-style="{'margin-left' : '0'}" ng-click="dashboardCtrl.removeComment(subcomment)" ng-if="subcomment.author._id == dashboardCtrl.userdata._id">
+                                                                        <md-button class="md-warn md-raised" ng-style="{'margin-left' : '0'}" ng-click="dashboardCtrl.removeComment(subcomment)"
+                                                                            ng-if="subcomment.author._id == dashboardCtrl.userdata._id">
                                                                             Remove
                                                                         </md-button>
                                                                     </div>
@@ -231,47 +245,37 @@
                                 </div>
                             </md-content>
                         </md-tab>
-                    </md-tabs>
+                        </md-tabs>
                 </md-content>
             </div>
         </div>
 
         <!-- subscribe user -->
-        <div class="col-md-2" >
-                select an admin app<br>
-                search for user<br>
-                press ENTER to subscribe him on selected app
-                <div  layout="column" ng-cloak>
-                  <md-content layout-padding layout="column">
+        <div class="col-md-2">
+            select an admin app<br> search for user<br> press ENTER to subscribe him on selected app
+            <div layout="column" ng-cloak>
+                <md-content layout-padding layout="column">
                     <form ng-submit="dashboardCtrl.submit()">
-                      <md-autocomplete
-                          ng-disabled="dashboardCtrl.isDisabled"
-                          md-no-cache="dashboardCtrl.noCache"
-                          md-selected-item="dashboardCtrl.selectedItem"
-                          md-search-text-change="dashboardCtrl.searchTextChange(dashboardCtrl.searchText)"
-                          md-search-text="dashboardCtrl.searchText"
-                          md-selected-item-change="dashboardCtrl.selectedItemChange(item)"
-                          md-items="item in dashboardCtrl.querySearch(dashboardCtrl.searchText)"
-                          md-item-text="item.username"
-                          md-min-length="0"
-                          placeholder="Select a user"
-                          md-menu-class="autocomplete-custom-template">
-                        <md-item-template>
-                            <span class="item-title">
+                        <md-autocomplete ng-disabled="dashboardCtrl.isDisabled" md-no-cache="dashboardCtrl.noCache" md-selected-item="dashboardCtrl.selectedItem"
+                            md-search-text-change="dashboardCtrl.searchTextChange(dashboardCtrl.searchText)" md-search-text="dashboardCtrl.searchText"
+                            md-selected-item-change="dashboardCtrl.selectedItemChange(item)" md-items="item in dashboardCtrl.querySearch(dashboardCtrl.searchText)"
+                            md-item-text="item.username" md-min-length="0" placeholder="Select a user" md-menu-class="autocomplete-custom-template">
+                            <md-item-template>
+                                <span class="item-title">
             
                                 <span> {{item.username}} </span>
-                              </span>
-                              <span class="item-metadata">
+                                </span>
+                                <span class="item-metadata">
                                 <span class="item-metastat">
                                   email: <strong>{{item.email}}</strong> 
                                 </span>
-                                
-                              </span>
-                        </md-item-template>
-                      </md-autocomplete>
+
+                                </span>
+                            </md-item-template>
+                        </md-autocomplete>
                     </form>
-                  </md-content>
-                </div>
+                </md-content>
             </div>
+        </div>
     </div>
 </div>
