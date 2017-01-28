@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var config = require('../config')
+var jwt = require('jsonwebtoken');
 
 module.exports = mongoose.model('App',new Schema({
 	name:{
@@ -10,6 +12,11 @@ module.exports = mongoose.model('App',new Schema({
 	stack:[String],
 	version:String,
 	repo:String,
+	token:{
+		type:String,
+		required:true,
+		default:Math.random
+	},
 	admin:{
 		type:Schema.Types.ObjectId,
 		ref:'User'
@@ -18,8 +25,6 @@ module.exports = mongoose.model('App',new Schema({
 		type:Schema.Types.ObjectId,
 		ref:'User'
 	}]
-
-	
-
 	
 }));
+

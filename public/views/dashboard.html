@@ -26,12 +26,14 @@
                                         <th>App Name</th>
                                         <th>Current Version</th>
                                         <th>Repository</th>
+                                        <th>Key</th>
                                     </thead>
                                     <tbody>
                                         <tr ng-click="dashboardCtrl.selectApp(app, $event)" class="clickable-row" ng-repeat="app in dashboardCtrl.admin_apps">
                                             <td>{{app.name}}</td>
                                             <td>{{app.version}}</td>
                                             <td>{{app.repo}}</td>
+                                            <td>{{app.token}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -42,12 +44,14 @@
                                         <th>App Name</th>
                                         <th>Current Version</th>
                                         <th>Repository</th>
+                                        <th>Key</th>
                                     </thead>
                                     <tbody>
                                         <tr ng-click="dashboardCtrl.selectApp(app)" ng-repeat="app in dashboardCtrl.subscribed_apps">
                                             <td>{{app.name}}</td>
                                             <td>{{app.version}}</td>
                                             <td>{{app.repo}}</td>
+                                            <td>{{app.token}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

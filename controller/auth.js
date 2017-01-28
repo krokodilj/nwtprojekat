@@ -1,6 +1,7 @@
 var jwt = require('jsonwebtoken');
 var config = require('../config');
 var User = require('../model/user');
+var App = require('../model/app');
 var Comment = require('../model/comment');
 
 var Auth = {
@@ -12,6 +13,7 @@ var Auth = {
 		} else {
 			jwt.verify(token, config.secretKey, function (err, user) {
 				if (err) {
+					console.log(err)
 					return res.json({ success: false, msg: 'failed to authenticate' });
 				} else {
 
@@ -74,6 +76,24 @@ var Auth = {
 			}
 			return res.json({ success: false, msg: "user is not an author of the comment" });
 		});
+
+	},
+
+	check_app_token :function(req,res,next){
+		var app_id=req.body.app_id
+
+		App.findOne({"_id":app_id},function(err,app){
+			if(app==null){
+				return res.json({success:false,msg:"no app"})
+			}
+
+			if(app.token!=req.body.key){
+				return res.json({success:false,msg:"accesdenied"})
+			}else{
+
+				next();
+			}
+		})
 
 	}
 

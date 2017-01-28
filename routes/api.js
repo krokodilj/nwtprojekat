@@ -106,7 +106,7 @@ router.post('/app/subscribe', auth.is_admin, function (req, res) {
 
 /*submit error*/
 
-router.post('/app/errorlog', function (req, res) {
+router.post('/app/errorlog',auth.check_app_token, function (req, res) {
 
 
     //get application name
