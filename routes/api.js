@@ -22,15 +22,15 @@ router.post('/', function (req, res) {
     })
 });
 
-router.get('/app/:id',function(req,res){
-    var app_id=req.params.id;
+router.get('/app/:id', function (req, res) {
+    var app_id = req.params.id;
 
-    App.findOne({_id:app_id},function(err,app){
-        if(err){
+    App.findOne({ _id: app_id }, function (err, app) {
+        if (err) {
             console.log(err)
             res.json({ success: false });
-        }else{
-            res.json({ success: true ,app_data:app});
+        } else {
+            res.json({ success: true, app_data: app });
         }
     })
 
@@ -106,45 +106,55 @@ router.post('/app/subscribe', auth.is_admin, function (req, res) {
 
 /*submit error*/
 
-router.post('/app/errorlog',auth.check_app_token, function (req, res) {
+router.post('/app/errorlog', function (req, res) {
 
 
-    //get application name
-    var appID = req.body.app_id;
+
     var event = new Event(req.body.event);
 
-    //put app id into event object
-    event.app = appID;
 
-    //save the event 
-    event.save(function (err) {
+
+    //find app
+    App.findOne({ token: req.body.key }).populate('admin subscribers').exec(function (err, app) {
+
+        //if error return
         if (err) {
             console.log(err);
             res.json({ success: false });
-        } else {
-
-            App.findOne({ _id: appID }).populate('admin subscribers').exec(function (err, app) {
-                //send error to emails
-                var users = []
-                users.push(app.admin.email)
-                for (i = 0; i < app.subscribers.length; i++) {
-                    users.push(app.subscribers[i].email)
-                }
-
-                event.app = app;
-                sender.send("error", event, users);
-
-                //update application version if outdated
-                if (event.version !== app.version) {
-                    app.version = event.version;
-                    app.save();
-                }
-                res.json({ success: true, event: event });
-
-            })
-
         }
-    });
+        else {
+            event.app = app;
+            //save event
+            event.save(function (err) {
+                if (err) {
+                    console.log(err);
+                    res.json({ success: false });
+                } else {
+                    //send error to emails
+                    var users = []
+                    users.push(app.admin.email)
+                    for (i = 0; i < app.subscribers.length; i++) {
+                        users.push(app.subscribers[i].email)
+                    }
+
+                    sender.send("error", event, users);
+
+                    //update application version if outdated
+                    if (event.version !== app.version) {
+                        app.version = event.version;
+                        app.save();
+                    }
+                    res.json({ success: true, event: event });
+
+                }
+            });
+        }
+
+
+
+    })
+
+
 
 });
 
@@ -213,7 +223,7 @@ router.delete('/comment', auth.is_comment_author, function (req, res) {
         if (err) {
             return res.json({ success: false, msg: "No comments" });
         }
-        Comment.remove({"_id" : id}).exec(function (err) {
+        Comment.remove({ "_id": id }).exec(function (err) {
             if (!err) {
                 return res.json({ success: true });
             };

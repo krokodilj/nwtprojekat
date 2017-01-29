@@ -10,6 +10,7 @@ var Auth = {
 
 		if (req.path === "/app/errorlog") {
 			next();
+			return ;
 		}
 		if (!token) {
 			res.json({ success: false, msg: "no token provided" });
