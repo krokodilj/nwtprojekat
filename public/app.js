@@ -22,16 +22,6 @@ angular
                 controller: "registerApp",
                 controllerAs: "registerAppCtrl"
             })
-            .when("/app/:id",{
-                templateUrl:"views/app.html",
-                controller:"appController",
-                controllerAs:"appCtrl"
-            })
-            .when("/event/:id",{
-                templateUrl:"views/event.html",
-                controller:"eventController",
-                controllerAs:"eventCtrl"
-            })
     })
     //filtering by appVersion
     .filter("byAppVersion", function() {

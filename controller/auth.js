@@ -8,6 +8,9 @@ var Auth = {
 	is_logged: function (req, res, next) {
 		var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
+		if (req.path === "/app/errorlog") {
+			next();
+		}
 		if (!token) {
 			res.json({ success: false, msg: "no token provided" });
 		} else {
